@@ -3,26 +3,55 @@ import { View, Text, StyleSheet, TextInput, Button, Image
  } from 'react-native'
 import React, { useState } from 'react'
 
+
 export default function LoginForm() {
-    const[username, setUsername] = useState("")
-    const[password, setPassword] = useState("")
+    const[username, setUsername] = useState("");
+    const[password, setPassword] = useState("");
+    const[errors, setErrors] = useState({});
+
+    const validateForm = () => {
+        let errors = {}
+
+        if(!username) errors.username = "Username is required";
+        if(!password) errors.password = "Password is required";
+
+        setErrors(errors);
+        return Object.keys(errors).length === 0;
+    }
+
+    const handleSubmit = () => {
+        if (validateForm()) {           
+            console.log("Submitted", username, password);
+            setUsername("");
+            setPassword("");
+            setErrors({});
+        }
+    };
     return (
      <KeyboardAvoidingView 
      behavior='padding'
      keyboardVerticalOffset={Platform.OS === 'ios' ? 100 : 0}
      style = {styles.container}>
         <View style = {styles.forms}>
-            <Image source = {require("./assets/adaptive-icon.png")} style = {styles.image}/>
+            <Image source = {require('../RNForms/assets/adaptive-icon.png')} style = {styles.image}/>
             <Text style={styles.label}>Username</Text>
             <TextInput style = {styles.input} placeholder='Enter your unique usernmae'
             value={username} onChangeText={setUsername}/>
+            
+            {
+                errors.username ? (<Text style = {styles.errorText}>{errors.username}</Text>) : null
+            }
+
             <Text style = {styles.label}>Password</Text>
             <TextInput style = {styles.input} placeholder='Enter your password...' 
             value={password} onChangeText={setPassword}
             secureTextEntry
             keyboardType="default" />
-
-            <Button title = "Get Inside" onPress={ () =>{} } />
+            
+            {
+                errors.password ? (<Text style = {styles.errorText}>{errors.password}</Text>) : null
+            }
+            <Button title = "Get Inside" onPress={handleSubmit} />
         </View>
      </KeyboardAvoidingView>
   ); 
@@ -66,5 +95,10 @@ const styles = StyleSheet.create({
         width:200,
         alignSelf:'center',
         marginBottom:10,
-    }
+    },
+    errorText: {
+        color:'red',
+        margin:10,
+    
+    },
 })
