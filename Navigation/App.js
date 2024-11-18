@@ -8,6 +8,7 @@ import {AboutStack} from "./AppStack";
 const Tab = createBottomTabNavigator()
 
 export default function App() {
+    
     return (
         <NavigationContainer>
             <Tab.Navigator screenOptions={{
